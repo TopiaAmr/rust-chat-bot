@@ -1,17 +1,18 @@
-use leptos::*;
-use cfg_if::cfg_if;
 use crate::model::conversation::Conversation;
+use cfg_if::cfg_if;
+use leptos::*;
 
 #[server(Converse "/api")]
 pub async fn converse(cx: Scope, prompt: Conversation) -> Result<String, ServerFnError> {
-    use llm::models::Llama;
-    use leptos_actix::extract;
-    use actix_web::web::Data;
     use actix_web::dev::ConnectionInfo;
+    use actix_web::web::Data;
+    use leptos_actix::extract;
+    use llm::models::Llama;
     let model = extract(cx, |data: Data<Llama>, _connection: ConnectionInfo| async {
         data.into_inner()
     })
-    .await.unwrap();
+    .await
+    .unwrap();
 
     use llm::KnownModel;
     let character_name = "### Assistant";
